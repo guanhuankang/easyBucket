@@ -103,6 +103,6 @@ class EasyBucket:
             while len(self.fifo) > 0:
                 self.tryUnload(self.fifo.pop(0))
 
-BUCKET_PATH = os.environ.get("BUCKET_PATH", "easyBucketData")
+BUCKET_PATH = os.environ.get("BUCKET_PATH", "easyBucketDatabase")
 BUCKET_FIFO = int(os.environ.get("BUCKET_FIFO", 50))
 easyBucket = EasyBucket(max_fifo=BUCKET_FIFO)
