@@ -2,7 +2,7 @@
 An easy multi-thread supported bucket database
 
 
-# INstallation
+# Installation
 ```sh
 pip install git+https://github.com/guanhuankang/easyBucket.git
 ```
@@ -11,7 +11,7 @@ pip install git+https://github.com/guanhuankang/easyBucket.git
 # Quick Try
 ## Main.sh
 ```shell
-BUCKET_PATH=bucket_archive BUCKET_FIFO=100 python main.py
+BUCKET_PATH=BucketBase BUCKET_FIFO=100 python main.py
 ```
 where enviroment variable "BUCKET_PATH" is the root location of the bucket database, and "BUCKET_FIFO" is the max-length of the FIFO queue, which will trigger the flush and unload event when the length of FIFO exceed the max-length value.
 
@@ -21,7 +21,6 @@ Below is the quick start toy code.
 
 ```python
 from easybucket import easyBucket
-import os
 
 def tutorial(x):
     bucket_name = "test"  ## Bucket name
@@ -36,13 +35,14 @@ def tutorial(x):
             }
         }
         bucket["cnt"] = bucket.get("cnt", 0) + 1
-        data = bucket.content()
         bucket.flush()  ## flush mannually ## Actually, easyBucket will flush automatically
+        data = bucket.content()
     print(data)
     print(easyBucket.buckets, len(easyBucket.fifo))
 
 if __name__=="__main__":
     from threading import Thread
+    import os
     import time,random
 
     # tutorial(2)
@@ -58,7 +58,7 @@ if __name__=="__main__":
     for t in threads:
         t.join()
 
-    # easyBucket.clean()  ## flush all data to stroage before exiting easyBucket
+    easyBucket.clean()  ## flush all data to stroage before exiting easyBucket
     print(easyBucket.buckets)  ## cache in the easyBucket
 
 ```

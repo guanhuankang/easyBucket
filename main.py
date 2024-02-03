@@ -1,5 +1,4 @@
 from easybucket import easyBucket
-import os
 
 def tutorial(x):
     bucket_name = "test"  ## Bucket name
@@ -16,11 +15,12 @@ def tutorial(x):
         bucket["cnt"] = bucket.get("cnt", 0) + 1
         bucket.flush()  ## flush mannually ## Actually, easyBucket will flush automatically
         data = bucket.content()
-    # print(data)
+    print(data)
     print(easyBucket.buckets, len(easyBucket.fifo))
 
 if __name__=="__main__":
     from threading import Thread
+    import os
     import time,random
 
     # tutorial(2)
@@ -36,5 +36,5 @@ if __name__=="__main__":
     for t in threads:
         t.join()
 
-    # easyBucket.clean()  ## flush all data to stroage before exiting easyBucket
+    easyBucket.clean()  ## flush all data to stroage before exiting easyBucket
     print(easyBucket.buckets)  ## cache in the easyBucket
