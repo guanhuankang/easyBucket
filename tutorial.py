@@ -1,5 +1,9 @@
 from easybucket import easyBucket
 
+## optional
+easyBucket.bucket_path = "easyBucketDataBase"
+easyBucket.max_fifo = 100 
+
 def tutorial(x):
     bucket_name = "test"  ## Bucket name
     with easyBucket(bucket_name, btype="json") as bucket:
@@ -20,8 +24,6 @@ def tutorial(x):
 
 if __name__=="__main__":
     from threading import Thread
-    import os
-    import time,random
 
     # tutorial(2)
     # exit(0)

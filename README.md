@@ -9,18 +9,14 @@ pip install git+https://github.com/guanhuankang/easyBucket.git
 
 
 # Quick Try
-## Main.sh
-```shell
-BUCKET_PATH=BucketBase BUCKET_FIFO=100 python main.py
-```
-where enviroment variable "BUCKET_PATH" is the root location of the bucket database, and "BUCKET_FIFO" is the max-length of the FIFO queue, which will trigger the flush and unload event when the length of FIFO exceed the max-length value.
-
-## Main.py
-
-Below is the quick start toy code.
+Below is the tutorial code.
 
 ```python
 from easybucket import easyBucket
+
+## optional
+easyBucket.bucket_path = "easyBucketDataBase"
+easyBucket.max_fifo = 100 
 
 def tutorial(x):
     bucket_name = "test"  ## Bucket name
@@ -42,8 +38,6 @@ def tutorial(x):
 
 if __name__=="__main__":
     from threading import Thread
-    import os
-    import time,random
 
     # tutorial(2)
     # exit(0)
@@ -62,6 +56,14 @@ if __name__=="__main__":
     print(easyBucket.buckets)  ## cache in the easyBucket
 
 ```
+where "easyBucket.bucket_path" is the root location of the bucket database, and "easyBucket.max_fifo" is the max-length of the FIFO queue, which will trigger the flush and unload event when the length of FIFO exceed the max-length value.
+
+Run tutorial.py:
+```shell
+python tutorial.py
+```
+
+Note that "bucket_name" is the unique identifier to retrieve the bucket.
 
 # ToDo
 [] Multi-bucket supporting
