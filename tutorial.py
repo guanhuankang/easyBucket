@@ -6,7 +6,7 @@ easyBucket.max_fifo = 100
 easyBucket.btype = "json"
 
 def tutorial(x):
-    bucket_name = "test"  ## Bucket name
+    bucket_name = "test"+str(x%5)  ## Bucket name
     with easyBucket(bucket_name) as bucket:
         bucket["say"] = "Hello World"
         bucket["name"] = "I am easyBucket"
@@ -21,7 +21,7 @@ def tutorial(x):
         bucket.flush()  ## flush mannually ## Actually, easyBucket will flush automatically
         data = bucket.content()
     print(data)
-    print(easyBucket.buckets, len(easyBucket.fifo))
+    print("metainfo:", easyBucket.list(), len(easyBucket.fifo))
 
 if __name__=="__main__":
     from threading import Thread
@@ -39,5 +39,6 @@ if __name__=="__main__":
     for t in threads:
         t.join()
 
+    print(easyBucket.delete("test1"), easyBucket.list())
     easyBucket.clean()  ## flush all data to stroage before exiting easyBucket
     print(easyBucket.buckets)  ## cache in the easyBucket

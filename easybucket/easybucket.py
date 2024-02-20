@@ -2,6 +2,8 @@ import os, copy
 import threading
 import pickle, json
 
+__format__ = ["json", "pickle"]
+
 def read(filename, btype="json"):
     mode = {"json": "r", "pickle": "rb"}[btype]
     method = {"json": json.load, "pickle": pickle.load}[btype]
@@ -97,8 +99,32 @@ class EasyBucket:
             if len(self.fifo) > self.max_fifo:
                 self.tryUnload(self.fifo.pop(0))
     
+    def list(self):
+        lst = os.listdir(self.bucket_path)
+        buckets = []
+        for x in lst:
+            tmp = x.split(".")
+            bucket_name = ".".join(tmp[0:-1])
+            btype = tmp[-1]
+            if len(bucket_name) > 0 and (btype in __format__):
+                buckets.append({
+                    "bucket_name": bucket_name,
+                    "btype": btype,
+                })
+        return buckets
+    
+    def delete(self, bucket_name):
+        ret = False
+        with self.collection_lock:
+            for btype in __format__:
+                filename = os.path.join(self.bucket_path, bucket_name+"."+btype)
+                if os.path.exists(filename) and self.tryUnload(bucket_name):
+                    os.remove(filename)
+                    ret = True
+        return ret
+    
     def tryUnload(self, bucket_name):
-        bucket, cnt = self.buckets.get(bucket_name, (None, 1))
+        bucket, cnt = self.buckets.get(bucket_name, (None, 0))
         if bucket == None:
             return True
         else:
