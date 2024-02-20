@@ -80,7 +80,9 @@ class EasyBucket:
         self.bucket_path = "easyBucketDataBase"
 
     def __call__(self, bucket_name, btype=None):
-        assert ("/" not in bucket_name) and ("\\" not in bucket_name)
+        bucket_name = bucket_name.replace("\\", "/")
+        assert bucket_name.startswith("/") == False
+        
         bucket_path = self.bucket_path
         btype = btype if btype else self.btype
         with self.collection_lock:

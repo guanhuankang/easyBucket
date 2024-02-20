@@ -6,7 +6,7 @@ easyBucket.max_fifo = 100
 easyBucket.btype = "json"
 
 def tutorial(x):
-    bucket_name = "test"+str(x%5)  ## Bucket name
+    bucket_name = "testcases/test"+str(x%5)  ## Bucket name
     with easyBucket(bucket_name) as bucket:
         bucket["say"] = "Hello World"
         bucket["name"] = "I am easyBucket"
