@@ -16,14 +16,14 @@ def write(data, filename, btype="json"):
         method(data, f)
 
 class Bucket:
-    def __init__(self, bucket_name, bucket_path, btype="json", exit_callback=lambda:None):
+    def __init__(self, bucket_name, bucket_path, btype, exit_callback=lambda:None):
         self.bucket_name = bucket_name
         self.btype = btype
         
         self.__exit_callback__ = exit_callback
         self.__lock__ = threading.Lock()
         self.__locked__ = False
-        self.__location__ = os.path.join(bucket_path, self.bucket_name + "."+btype)
+        self.__location__ = os.path.join(bucket_path, bucket_name+"."+btype)
         self.__content__ = self.__load__(default={})
     
     def flush(self):
@@ -77,10 +77,10 @@ class EasyBucket:
         self.btype = "json"
         self.bucket_path = "easyBucketDataBase"
 
-    def __call__(self, bucket_name, bucket_path=None, btype=None):
-        bucket_path = bucket_path if bucket_path else self.bucket_path
+    def __call__(self, bucket_name, btype=None):
+        assert ("/" not in bucket_name) and ("\\" not in bucket_name)
+        bucket_path = self.bucket_path
         btype = btype if btype else self.btype
-        
         with self.collection_lock:
             bucket, cnt = self.buckets.get(bucket_name, (None, 0))
             if bucket==None:
@@ -99,12 +99,15 @@ class EasyBucket:
     
     def tryUnload(self, bucket_name):
         bucket, cnt = self.buckets.get(bucket_name, (None, 1))
-        if bucket!=None and cnt <= 0:
-            bucket.flush()
-            self.buckets.pop(bucket_name)
+        if bucket == None:
             return True
         else:
-            return False
+            if cnt <= 0:
+                bucket.flush()
+                self.buckets.pop(bucket_name)
+                return True
+            else:
+                return False
     
     def clean(self):
         with self.collection_lock:
