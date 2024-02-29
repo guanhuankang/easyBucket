@@ -85,7 +85,7 @@ class EasyBucket:
         self.fifo = []
         self.max_fifo = 50
         self.btype = "json"
-        self.bucket_path = "easyBucketDataBase"
+        self.bucket_path = "easybucketdatabase"
 
     def __call__(self, bucket_name, btype=None):
         bucket_name = bucket_name.replace("\\", "/")
