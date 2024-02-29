@@ -7,16 +7,24 @@ __format__ = ["json", "pickle"]
 def read(filename, btype="json"):
     mode = {"json": "r", "pickle": "rb"}[btype]
     method = {"json": json.load, "pickle": pickle.load}[btype]
-    with open(filename, mode) as f:
-        data = method(f)
+    if btype=="json":
+        with open(filename, mode, encoding="utf8") as f:
+            data = method(f)
+    else:
+        with open(filename, mode) as f:
+            data = method(f)
     return data
 
 def write(data, filename, btype="json"):
     mode = {"json": "w", "pickle": "wb"}[btype]
     method = {"json": json.dump, "pickle": pickle.dump}[btype]
-    with open(filename, mode) as f:
-        method(data, f)
-
+    if btype=="json":
+        with open(filename, mode, encoding='utf8') as f:
+            method(data, f, ensure_ascii=False)
+    else:
+        with open(filename, mode) as f:
+            method(data, f)
+        
 class Bucket:
     def __init__(self, bucket_name, bucket_path, btype, exit_callback=lambda:None):
         self.bucket_name = bucket_name
