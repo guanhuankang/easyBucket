@@ -83,7 +83,7 @@ class EasyBucket:
         self.collection_lock = threading.Lock()
         self.buckets = {}
         self.fifo = []
-        self.max_fifo = 50
+        self.max_fifo = 1024
         self.btype = "json"
         self.bucket_path = "easybucketdatabase"
 
