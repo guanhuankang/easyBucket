@@ -29,6 +29,7 @@ class Bucket:
     def __init__(self, bucket_name, bucket_path, btype, exit_callback=lambda:None):
         self.bucket_name = bucket_name
         self.btype = btype
+        self.meta = {}
         
         self.__exit_callback__ = exit_callback
         self.__lock__ = threading.Lock()
